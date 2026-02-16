@@ -6,7 +6,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF2196F3), // Primary Blue
+        seedColor: const Color(0xFF667EEA), // Modern Indigo
         brightness: Brightness.light,
       ),
       textTheme: ThemeData.light().textTheme.copyWith(
@@ -47,7 +47,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.borderRadius),
           ),
-          elevation: 2,
+          elevation: 4,
+          shadowColor: const Color(0xFF667EEA).withOpacity(0.3),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -56,18 +57,21 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.secondaryBorderRadius),
           ),
+          side: const BorderSide(color: Color(0xFF667EEA)),
         ),
       ),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
           minimumSize: const Size(AppConstants.iconButtonSize, AppConstants.iconButtonSize),
           shape: const CircleBorder(),
+          backgroundColor: const Color(0xFF667EEA).withOpacity(0.1),
         ),
       ),
       cardTheme: CardThemeData(
-        elevation: 2,
+        elevation: 8,
+        shadowColor: const Color(0xFF667EEA).withOpacity(0.2),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
       ),
     );
@@ -77,7 +81,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF64B5F6), // Light Blue
+        seedColor: const Color(0xFF764BA2), // Modern Purple
         brightness: Brightness.dark,
       ),
       textTheme: ThemeData.dark().textTheme.copyWith(
@@ -105,7 +109,7 @@ class AppTheme {
         labelLarge: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -114,7 +118,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.borderRadius),
           ),
-          elevation: 2,
+          elevation: 6,
+          shadowColor: const Color(0xFF764BA2).withOpacity(0.4),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -123,19 +128,22 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.secondaryBorderRadius),
           ),
+          side: const BorderSide(color: Color(0xFF764BA2)),
         ),
       ),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
           minimumSize: const Size(AppConstants.iconButtonSize, AppConstants.iconButtonSize),
           shape: const CircleBorder(),
+          backgroundColor: const Color(0xFF764BA2).withOpacity(0.2),
         ),
       ),
       cardTheme: CardThemeData(
-        elevation: 2,
+        elevation: 10,
+        shadowColor: const Color(0xFF764BA2).withOpacity(0.3),
         color: const Color(0xFF1E1E1E),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
       ),
     );
@@ -145,7 +153,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF9C27B0), // Purple
+        seedColor: const Color(0xFFFF6B6B), // Vibrant Red
         brightness: Brightness.light,
       ),
       textTheme: ThemeData.light().textTheme.copyWith(
@@ -186,7 +194,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.borderRadius),
           ),
-          elevation: 2,
+          elevation: 5,
+          shadowColor: const Color(0xFFFF6B6B).withOpacity(0.3),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -195,18 +204,21 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.secondaryBorderRadius),
           ),
+          side: const BorderSide(color: Color(0xFFFF6B6B)),
         ),
       ),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
           minimumSize: const Size(AppConstants.iconButtonSize, AppConstants.iconButtonSize),
           shape: const CircleBorder(),
+          backgroundColor: const Color(0xFFFF6B6B).withOpacity(0.1),
         ),
       ),
       cardTheme: CardThemeData(
-        elevation: 2,
+        elevation: 8,
+        shadowColor: const Color(0xFFFF6B6B).withOpacity(0.25),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
       ),
     );
