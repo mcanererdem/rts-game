@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../data/local/preferences_service.dart';
+import '../../providers/theme_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -12,7 +14,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  AppThemeMode _themeMode = AppThemeMode.light;
   bool _soundEnabled = true;
   bool _hapticsEnabled = true;
   int _defaultRounds = AppConstants.defaultRounds;
@@ -25,7 +26,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _loadSettings() {
     setState(() {
-      _themeMode = PreferencesService.instance.themeMode;
       _soundEnabled = PreferencesService.instance.soundEnabled;
       _hapticsEnabled = PreferencesService.instance.hapticsEnabled;
       _defaultRounds = PreferencesService.instance.defaultRounds;
@@ -214,25 +214,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildThemeSelector() {
-    return Column(
-      children: AppThemeMode.values.map((mode) {
-        return RadioListTile<AppThemeMode>(
-          title: Text(_getThemeDisplayName(mode)),
-          subtitle: Text(_getThemeDescription(mode)),
-          value: mode,
-          groupValue: _themeMode,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                _themeMode = value;
-              });
-              PreferencesService.instance.setThemeMode(value);
-              _applyTheme(value);
-            }
-          },
-          secondary: Icon(_getThemeIcon(mode)),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return Column(
+          children: AppThemeMode.values.map((mode) {
+            return RadioListTile<AppThemeMode>(
+              title: Text(themeProvider.getThemeDisplayName()),
+              subtitle: Text(themeProvider.getThemeDescription()),
+              value: mode,
+              groupValue: themeProvider.themeMode,
+              onChanged: (value) async {
+                if (value != null) {
+                  await themeProvider.setTheme(value);
+                }
+              },
+            );
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
 
@@ -442,7 +441,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _exportData() {
     final stats = PreferencesService.instance.getUserStats();
     final data = {
-      'themeMode': _themeMode.toString(),
+      'themeMode': Provider.of<ThemeProvider>(context, listen: false).themeMode.toString(),
       'soundEnabled': _soundEnabled,
       'hapticsEnabled': _hapticsEnabled,
       'defaultRounds': _defaultRounds,

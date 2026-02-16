@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_stats.dart';
-
-enum AppThemeMode { light, dark, colorful }
+import '../../presentation/providers/theme_provider.dart';
 
 class PreferencesService {
   static PreferencesService? _instance;
@@ -38,6 +37,14 @@ class PreferencesService {
   int get defaultRounds => _prefs.getInt('default_rounds') ?? 3;
   Future<void> setDefaultRounds(int rounds) async {
     await _prefs.setInt('default_rounds', rounds);
+  }
+
+  Future<void> setInt(String key, int value) async {
+    await _prefs.setInt(key, value);
+  }
+
+  int getInt(String key) {
+    return _prefs.getInt(key) ?? 0;
   }
 
   // User Stats
