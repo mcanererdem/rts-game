@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../data/local/preferences_service.dart';
+import '../../../data/models/user_stats.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -9,6 +11,21 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
+  UserStats? _stats;
+  List<Map<String, dynamic>> _matchHistory = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStats();
+  }
+
+  void _loadStats() {
+    setState(() {
+      _stats = PreferencesService.instance.getUserStats();
+      _matchHistory = PreferencesService.instance.getMatchHistory();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +48,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   child: _buildStatCard(
                     context,
                     title: 'Toplam Oyun',
-                    value: '156',
+                    value: '${_stats?.totalGames ?? 0}',
                     icon: Icons.sports_esports,
                     color: Colors.blue,
                   ),
@@ -41,7 +58,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   child: _buildStatCard(
                     context,
                     title: 'Galibiyet',
-                    value: '89',
+                    value: '${_stats?.wins ?? 0}',
                     icon: Icons.emoji_events,
                     color: Colors.green,
                   ),
@@ -57,7 +74,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   child: _buildStatCard(
                     context,
                     title: 'Mağlubiyet',
-                    value: '54',
+                    value: '${_stats?.losses ?? 0}',
                     icon: Icons.sentiment_very_dissatisfied,
                     color: Colors.red,
                   ),
@@ -67,7 +84,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   child: _buildStatCard(
                     context,
                     title: 'Berabere',
-                    value: '13',
+                    value: '${_stats?.draws ?? 0}',
                     icon: Icons.handshake,
                     color: Colors.orange,
                   ),
@@ -93,13 +110,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     ),
                     const SizedBox(height: AppConstants.md),
                     LinearProgressIndicator(
-                      value: 0.62, // 62% win rate
+                      value: _stats?.winRate ?? 0.0,
                       backgroundColor: Colors.grey.withOpacity(0.3),
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
                     ),
                     const SizedBox(height: AppConstants.sm),
                     Text(
-                      '62%',
+                      '${((_stats?.winRate ?? 0.0) * 100).toInt()}%',
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),

@@ -5,6 +5,9 @@ import '../../../data/models/game_match.dart';
 import '../../../data/models/game_round.dart';
 import '../../../domain/game_engine/game_logic.dart';
 import '../../../domain/game_engine/ai_opponent.dart';
+import '../../../core/utils/sound_manager.dart';
+import '../../../core/utils/haptic_manager.dart';
+import '../../../data/local/preferences_service.dart';
 import 'widgets/choice_button.dart';
 import 'widgets/score_board.dart';
 import 'widgets/countdown_widget.dart';
@@ -48,6 +51,9 @@ class _GameScreenState extends State<GameScreen> {
   void _onChoiceSelected(GameChoice choice) {
     if (_isCountingDown || _showingResult) return;
     
+    SoundManager.instance.playSound(SoundType.click);
+    HapticManager.instance.selectionClick();
+    
     setState(() {
       _playerChoice = choice;
       _isCountingDown = true;
@@ -58,6 +64,8 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _startCountdown() async {
+    SoundManager.instance.playSound(SoundType.countdown);
+    
     // Show countdown animation
     await Future.delayed(const Duration(milliseconds: AppConstants.countdownDuration));
     
@@ -74,6 +82,22 @@ class _GameScreenState extends State<GameScreen> {
       );
       
       _currentMatch = _currentMatch!.addRound(round);
+      
+      // Play result sound
+      switch (result) {
+        case GameResult.win:
+          SoundManager.instance.playSound(SoundType.win);
+          HapticManager.instance.success();
+          break;
+        case GameResult.lose:
+          SoundManager.instance.playSound(SoundType.lose);
+          HapticManager.instance.error();
+          break;
+        case GameResult.draw:
+          SoundManager.instance.playSound(SoundType.draw);
+          HapticManager.instance.mediumImpact();
+          break;
+      }
       
       // Show result
       _showResult(result);

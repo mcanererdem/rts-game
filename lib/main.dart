@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'core/constants/app_constants.dart';
 import 'presentation/theme/app_theme.dart';
 import 'presentation/screens/splash/splash_screen.dart';
+import 'data/local/preferences_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PreferencesService.instance.init();
   runApp(const MyApp());
 }
 

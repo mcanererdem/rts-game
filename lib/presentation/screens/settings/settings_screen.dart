@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_constants.dart';
-
-enum AppThemeMode { light, dark, colorful }
+import '../../../data/local/preferences_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -15,6 +14,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _soundEnabled = true;
   bool _hapticsEnabled = true;
   int _defaultRounds = AppConstants.defaultRounds;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  void _loadSettings() {
+    setState(() {
+      _themeMode = PreferencesService.instance.themeMode;
+      _soundEnabled = PreferencesService.instance.soundEnabled;
+      _hapticsEnabled = PreferencesService.instance.hapticsEnabled;
+      _defaultRounds = PreferencesService.instance.defaultRounds;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +66,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   setState(() {
                     _soundEnabled = value;
                   });
-                  // TODO: Save to preferences
+                  PreferencesService.instance.setSoundEnabled(value);
                 },
               ),
               _buildToggleTile(
@@ -64,7 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   setState(() {
                     _hapticsEnabled = value;
                   });
-                  // TODO: Save to preferences
+                  PreferencesService.instance.setHapticsEnabled(value);
                 },
               ),
             ],
@@ -186,7 +200,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               setState(() {
                 _themeMode = value;
               });
-              // TODO: Apply theme and save
+              PreferencesService.instance.setThemeMode(value);
               _applyTheme(value);
             }
           },
@@ -245,7 +259,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             setState(() {
               _defaultRounds = value;
             });
-            // TODO: Save to preferences
+            PreferencesService.instance.setDefaultRounds(value);
           }
         },
       ),
@@ -325,6 +339,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Tüm veriler sıfırlandı')),
               );
+              PreferencesService.instance.resetAllData();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
