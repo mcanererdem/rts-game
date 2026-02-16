@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../data/models/game_choice.dart';
+import '../../../widgets/modern_game_icons.dart';
 
 class ChoiceButton extends StatelessWidget {
   final GameChoice choice;
@@ -81,10 +82,7 @@ class ChoiceButton extends StatelessWidget {
                       AnimatedScale(
                         scale: disabled ? 0.8 : 1.0,
                         duration: const Duration(milliseconds: 300),
-                        child: Text(
-                          choice.emoji,
-                          style: const TextStyle(fontSize: 45),
-                        ),
+                        child: _buildModernIcon(),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -107,6 +105,73 @@ class ChoiceButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildModernIcon() {
+    switch (choice) {
+      case GameChoice.rock:
+        return ModernGameIcons.rockIcon;
+      case GameChoice.paper:
+        return ModernGameIcons.paperIcon;
+      case GameChoice.scissors:
+        return ModernGameIcons.scissorsIcon;
+      case GameChoice.fire:
+        return Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color(0xFFFF7043),
+                const Color(0xFFE64A19),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFFF7043).withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.local_fire_department,
+            color: Colors.white,
+            size: 35,
+          ),
+        );
+      case GameChoice.water:
+        return Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color(0xFF4FC3F7),
+                const Color(0xFF29B6F6),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF4FC3F7).withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.water_drop,
+            color: Colors.white,
+            size: 35,
+          ),
+        );
+    }
   }
 
   Color _getChoiceColor(BuildContext context) {
