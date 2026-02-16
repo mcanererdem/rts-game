@@ -208,7 +208,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               ),
             ),
             
-            const Spacer(),
+            const SizedBox(height: AppConstants.lg),
             
             // Recent Matches
             Card(
