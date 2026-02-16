@@ -49,6 +49,7 @@ dependencies:
   # UI Components
   flutter_svg: ^2.0.9
   confetti: ^0.7.0
+  url_launcher: ^6.2.4
   
   # Utilities
   uuid: ^4.2.2
