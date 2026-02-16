@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_constants.dart';
 
 class AppTheme {
@@ -10,7 +9,7 @@ class AppTheme {
         seedColor: const Color(0xFF2196F3), // Primary Blue
         brightness: Brightness.light,
       ),
-      textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+      textTheme: ThemeData.light().textTheme.copyWith(
         displayLarge: const TextStyle(
           fontSize: 32,
           fontWeight: FontWeight.bold,
@@ -65,7 +64,7 @@ class AppTheme {
           shape: const CircleBorder(),
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -81,11 +80,10 @@ class AppTheme {
         seedColor: const Color(0xFF64B5F6), // Light Blue
         brightness: Brightness.dark,
       ),
-      textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme).copyWith(
+      textTheme: ThemeData.light().textTheme.copyWith(
         displayLarge: const TextStyle(
           fontSize: 32,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
         ),
         displayMedium: const TextStyle(
           fontSize: 24,
@@ -136,7 +134,7 @@ class AppTheme {
           shape: const CircleBorder(),
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         color: const Color(0xFF1E1E1E),
         shape: RoundedRectangleBorder(
