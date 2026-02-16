@@ -12,6 +12,7 @@ import '../../../data/local/preferences_service.dart';
 import 'widgets/choice_button.dart';
 import 'widgets/score_board.dart';
 import 'widgets/countdown_widget.dart';
+import 'widgets/win_animation.dart';
 
 class GameScreen extends StatefulWidget {
   final int totalRounds;
@@ -32,6 +33,7 @@ class _GameScreenState extends State<GameScreen> {
   GameChoice? _playerChoice;
   GameChoice? _aiChoice;
   final AIOpponent _aiOpponent = AIOpponent();
+  bool _showWinAnimation = false;
 
   @override
   void initState() {
@@ -109,11 +111,16 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {
       _isCountingDown = false;
       _showingResult = true;
+      _showWinAnimation = result == GameResult.win;
     });
 
     // Hide result after delay
     Future.delayed(const Duration(milliseconds: AppConstants.resultDisplayDuration), () {
       if (mounted) {
+        setState(() {
+          _showWinAnimation = false;
+        });
+        
         if (_currentMatch?.isCompleted == true) {
           _showMatchCompleteDialog();
         } else {
@@ -288,57 +295,60 @@ class _GameScreenState extends State<GameScreen> {
   Widget _buildResultDisplay() {
     final result = GameLogic.determineWinner(_playerChoice!, _aiChoice!);
     
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: [
-                Text(
-                  'Sen',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: AppConstants.sm),
-                Text(
-                  _playerChoice!.emoji,
-                  style: const TextStyle(fontSize: 80),
-                ),
-                Text(
-                  _playerChoice!.displayName,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Text(
-                  'AI',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: AppConstants.sm),
-                Text(
-                  _aiChoice!.emoji,
-                  style: const TextStyle(fontSize: 80),
-                ),
-                Text(
-                  _aiChoice!.displayName,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: AppConstants.lg),
-        Text(
-          GameLogic.getResultMessage(result),
-          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-            color: result == GameResult.win ? Colors.green :
-                   result == GameResult.lose ? Colors.red : Colors.orange,
+    return WinAnimation(
+      showAnimation: _showWinAnimation,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    'Sen',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: AppConstants.sm),
+                  Text(
+                    _playerChoice!.emoji,
+                    style: const TextStyle(fontSize: 80),
+                  ),
+                  Text(
+                    _playerChoice!.displayName,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Text(
+                    'AI',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: AppConstants.sm),
+                  Text(
+                    _aiChoice!.emoji,
+                    style: const TextStyle(fontSize: 80),
+                  ),
+                  Text(
+                    _aiChoice!.displayName,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-      ],
+          const SizedBox(height: AppConstants.lg),
+          Text(
+            GameLogic.getResultMessage(result),
+            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              color: result == GameResult.win ? Colors.green :
+                     result == GameResult.lose ? Colors.red : Colors.orange,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
