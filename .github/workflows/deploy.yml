@@ -1,0 +1,33 @@
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout 🛎
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter 🐦
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.41.1'
+        
+    - name: Install dependencies 📦
+      run: flutter pub get
+      
+    - name: Build web app 🌐
+      run: flutter build web --base-href "/${{ github.event.repository.name }}/"
+      
+    - name: Setup Pages 📄
+      uses: actions/configure-pages@v4
+      
+    - name: Upload artifact 📤
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './build/web'
