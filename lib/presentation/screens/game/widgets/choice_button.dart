@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../data/models/game_choice.dart';
 
@@ -19,39 +20,89 @@ class ChoiceButton extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: AppConstants.buttonAnimationDuration),
       curve: Curves.easeInOut,
-      child: ElevatedButton(
-        onPressed: disabled ? null : onPressed,
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size(80, 80),
-          maximumSize: const Size(120, 120),
-          shape: const CircleBorder(),
-          elevation: disabled ? 0 : 4,
-          backgroundColor: disabled 
-            ? Theme.of(context).colorScheme.surface
-            : _getChoiceColor(context),
-        ),
-        child: AnimatedScale(
-          scale: disabled ? 0.9 : 1.0,
-          duration: const Duration(milliseconds: AppConstants.buttonAnimationDuration),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                choice.emoji,
-                style: const TextStyle(fontSize: 40),
+      child: GestureDetector(
+        onTap: disabled ? null : onPressed,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          transform: Matrix4.identity()
+            ..scale(disabled ? 0.9 : 1.0)
+            ..rotateZ(disabled ? 0.0 : 0.0),
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  _getChoiceColor(context).withOpacity(0.8),
+                  _getChoiceColor(context).withOpacity(0.6),
+                ],
               ),
-              const SizedBox(height: AppConstants.xs),
-              Text(
-                choice.displayName,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: disabled 
-                    ? Theme.of(context).colorScheme.onSurface.withOpacity(0.5)
-                    : _getTextColor(context),
-                  fontWeight: FontWeight.w600,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: _getChoiceColor(context).withOpacity(0.4),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
                 ),
-                textAlign: TextAlign.center,
+                BoxShadow(
+                  color: _getChoiceColor(context).withOpacity(0.2),
+                  blurRadius: 25,
+                  offset: const Offset(0, 15),
+                ),
+              ],
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1.5,
               ),
-            ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withOpacity(0.2),
+                        Colors.white.withOpacity(0.1),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AnimatedScale(
+                        scale: disabled ? 0.8 : 1.0,
+                        duration: const Duration(milliseconds: 300),
+                        child: Text(
+                          choice.emoji,
+                          style: const TextStyle(fontSize: 45),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        choice.displayName,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: disabled 
+                            ? Colors.white.withOpacity(0.4)
+                            : Colors.white.withOpacity(0.9),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -70,18 +121,6 @@ class ChoiceButton extends StatelessWidget {
         return const Color(0xFFFF7043); // Deep Orange
       case GameChoice.water:
         return const Color(0xFF4FC3F7); // Light Blue
-    }
-  }
-
-  Color _getTextColor(BuildContext context) {
-    switch (choice) {
-      case GameChoice.rock:
-      case GameChoice.fire:
-        return Colors.white;
-      case GameChoice.paper:
-      case GameChoice.scissors:
-      case GameChoice.water:
-        return Colors.black;
     }
   }
 }

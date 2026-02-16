@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import '../../../core/constants/app_constants.dart';
 import '../../../data/models/game_choice.dart';
 import '../../../data/models/game_match.dart';
@@ -193,34 +194,65 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Oyun - Tur ${_currentMatch?.currentRound ?? 1}/${widget.totalRounds}'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.arrow_back),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(AppConstants.lg),
-        child: Column(
-          children: [
-            // Score Board
-            if (_currentMatch != null)
-              ScoreBoard(match: _currentMatch!),
-            
-            const SizedBox(height: AppConstants.lg),
-            
-            // Game Area
-            Expanded(
-              child: Center(
-                child: _buildGameArea(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF667EEA).withOpacity(0.8),
+              const Color(0xFF764BA2).withOpacity(0.8),
+              const Color(0xFF64B5F6).withOpacity(0.6),
+            ],
+            stops: const [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withOpacity(0.1),
+                  Colors.white.withOpacity(0.05),
+                ],
               ),
             ),
-            
-            // Choice Buttons
-            if (!_isCountingDown && !_showingResult)
-              _buildChoiceButtons(),
-          ],
+            child: Padding(
+              padding: const EdgeInsets.all(AppConstants.lg),
+              child: Column(
+                children: [
+                  // Score Board
+                  if (_currentMatch != null)
+                    ScoreBoard(match: _currentMatch!),
+                  
+                  const SizedBox(height: AppConstants.lg),
+                  
+                  // Game Area
+                  Expanded(
+                    child: Center(
+                      child: _buildGameArea(),
+                    ),
+                  ),
+                  
+                  // Choice Buttons
+                  if (!_isCountingDown && !_showingResult)
+                    _buildChoiceButtons(),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
